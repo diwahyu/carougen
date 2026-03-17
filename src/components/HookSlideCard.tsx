@@ -1,4 +1,4 @@
-import { HookSlide, ThemeId } from "@/types/carousel"
+import { HookSlide, LayoutId, ThemeId } from "@/types/carousel"
 import { SlideLayout } from "./SlideLayout"
 import { GradientText } from "./GradientText"
 import { getTheme } from "@/lib/themes"
@@ -9,6 +9,7 @@ export function HookSlideCard({
   slideNumber,
   totalSlides,
   themeId,
+  layoutId,
   highlightColor,
 }: {
   slide: HookSlide
@@ -16,12 +17,13 @@ export function HookSlideCard({
   slideNumber?: number
   totalSlides?: number
   themeId?: ThemeId
+  layoutId?: LayoutId
   highlightColor?: string
 }) {
   const theme = getTheme(themeId)
 
   return (
-    <SlideLayout topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId}>
+    <SlideLayout topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId} layoutId={layoutId}>
       <div className="flex flex-col gap-10">
         {/* Emoji eye-catcher */}
         {slide.emoji && (

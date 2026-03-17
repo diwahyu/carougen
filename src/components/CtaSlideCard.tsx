@@ -1,4 +1,4 @@
-import { CtaSlide, ThemeId } from "@/types/carousel"
+import { CtaSlide, LayoutId, ThemeId } from "@/types/carousel"
 import { SlideLayout } from "./SlideLayout"
 import { getTheme } from "@/lib/themes"
 
@@ -8,12 +8,14 @@ export function CtaSlideCard({
   slideNumber,
   totalSlides,
   themeId,
+  layoutId,
 }: {
   slide: CtaSlide
   topic?: string
   slideNumber?: number
   totalSlides?: number
   themeId?: ThemeId
+  layoutId?: LayoutId
 }) {
   const theme = getTheme(themeId)
   const socials = slide.socials ?? [
@@ -23,7 +25,7 @@ export function CtaSlideCard({
   ]
 
   return (
-    <SlideLayout topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId}>
+    <SlideLayout topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId} layoutId={layoutId}>
       <div className="flex flex-col items-center text-center gap-10">
         <p
           className="text-[54px] font-extrabold leading-[1.2] tracking-tight"

@@ -1,20 +1,21 @@
 import Image from "next/image"
-import { ThemeId } from "@/types/carousel"
+import { LayoutId, ThemeId } from "@/types/carousel"
 import { getTheme } from "@/lib/themes"
 
 interface SlideLayoutProps {
   children: React.ReactNode
   topic?: string
-  year?: string
   slideNumber?: number
   totalSlides?: number
   themeId?: ThemeId
+  layoutId?: LayoutId
 }
 
-export function SlideLayout({ children, topic, year, slideNumber, totalSlides, themeId }: SlideLayoutProps) {
+export function SlideLayout({ children, topic, slideNumber, totalSlides, themeId, layoutId }: SlideLayoutProps) {
   const isFirst = slideNumber === 1
   const isLast = slideNumber === totalSlides
   const theme = getTheme(themeId)
+  const layout = layoutId || "classic"
 
   return (
     <div
@@ -36,6 +37,52 @@ export function SlideLayout({ children, topic, year, slideNumber, totalSlides, t
         />
       ))}
 
+      {layout === "classic" ? (
+        <ClassicLayout
+          topic={topic}
+          slideNumber={slideNumber}
+          totalSlides={totalSlides}
+          isFirst={isFirst}
+          isLast={isLast}
+          theme={theme}
+        >
+          {children}
+        </ClassicLayout>
+      ) : (
+        <EditorialLayout
+          topic={topic}
+          slideNumber={slideNumber}
+          totalSlides={totalSlides}
+          isFirst={isFirst}
+          isLast={isLast}
+          theme={theme}
+        >
+          {children}
+        </EditorialLayout>
+      )}
+    </div>
+  )
+}
+
+function ClassicLayout({
+  children,
+  topic,
+  slideNumber,
+  totalSlides,
+  isFirst,
+  isLast,
+  theme,
+}: {
+  children: React.ReactNode
+  topic?: string
+  slideNumber?: number
+  totalSlides?: number
+  isFirst: boolean
+  isLast: boolean
+  theme: ReturnType<typeof getTheme>
+}) {
+  return (
+    <>
       {/* Header */}
       <div className="relative z-10 flex items-center gap-5 px-16 pt-14 pb-6">
         <div className="w-[72px] h-[72px] rounded-full overflow-hidden border-2 border-white/60 shadow-lg shrink-0">
@@ -84,17 +131,6 @@ export function SlideLayout({ children, topic, year, slideNumber, totalSlides, t
               </span>
             </div>
           )}
-          <div
-            className="backdrop-blur-xl border border-white/20 rounded-full px-6 py-2.5 shadow-sm"
-            style={{ backgroundColor: theme.badgeBg }}
-          >
-            <span
-              className="text-[22px] font-medium"
-              style={{ color: theme.textSecondary }}
-            >
-              {year || new Date().getFullYear()}
-            </span>
-          </div>
         </div>
 
         {/* Swipe guide */}
@@ -122,6 +158,83 @@ export function SlideLayout({ children, topic, year, slideNumber, totalSlides, t
           </div>
         )}
       </div>
-    </div>
+    </>
+  )
+}
+
+function EditorialLayout({
+  children,
+  topic,
+  slideNumber,
+  totalSlides,
+  isFirst,
+  isLast,
+  theme,
+}: {
+  children: React.ReactNode
+  topic?: string
+  slideNumber?: number
+  totalSlides?: number
+  isFirst: boolean
+  isLast: boolean
+  theme: ReturnType<typeof getTheme>
+}) {
+  return (
+    <>
+      {/* Top accent line */}
+      <div
+        className="relative z-10 h-[6px] w-full"
+        style={{
+          background: `linear-gradient(to right, ${theme.accentLine.from}, ${theme.accentLine.via}, ${theme.accentLine.to})`,
+        }}
+      />
+
+      {/* Minimal header — topic + slide count */}
+      <div className="relative z-10 flex items-center justify-between px-16 pt-12 pb-4">
+        {topic && (
+          <span
+            className="text-[20px] font-semibold tracking-[0.2em] uppercase"
+            style={{ color: theme.textSecondary }}
+          >
+            {topic}
+          </span>
+        )}
+        {slideNumber && totalSlides && (
+          <span
+            className="text-[20px] font-medium tabular-nums"
+            style={{ color: theme.textSecondary }}
+          >
+            {String(slideNumber).padStart(2, "0")} / {String(totalSlides).padStart(2, "0")}
+          </span>
+        )}
+      </div>
+
+      {/* Content area — more generous padding */}
+      <div className="relative z-10 flex-1 flex flex-col justify-center px-20">
+        {children}
+      </div>
+
+      {/* Minimal footer */}
+      <div className="relative z-10 flex items-center justify-between px-16 pb-12 pt-4">
+        <span
+          className="text-[18px] font-medium"
+          style={{ color: theme.textSecondary }}
+        >
+          @dinarww
+        </span>
+
+        {!isLast && (
+          <div className="flex items-center gap-3" style={{ color: theme.swipeColor }}>
+            <div
+              className="w-12 h-[2px]"
+              style={{ backgroundColor: theme.swipeColor }}
+            />
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </div>
+        )}
+      </div>
+    </>
   )
 }

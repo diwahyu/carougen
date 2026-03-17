@@ -25,7 +25,7 @@ export type Slide = HookSlide | ContentSlide | CtaSlide
 
 export type LayoutId = "classic" | "editorial"
 
-export type ThemeId = "bw-gradient" | "dark" | "warm" | "ocean-depth"
+export type ThemeId = "bw-gradient" | "dark" | "warm" | "ai" | "akademi-profit"
 
 export type ThemeConfig = {
   id: ThemeId

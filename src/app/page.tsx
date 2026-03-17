@@ -73,6 +73,7 @@ export default function Home() {
               topic={project.topic}
               scale={1}
               themeId={project.theme}
+              layoutId={project.layout}
               highlightColor={project.highlightColor}
             />
           ))}

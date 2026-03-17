@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { CarouselProject, Slide, ThemeId } from "@/types/carousel"
+import { CarouselProject, LayoutId, Slide, ThemeId } from "@/types/carousel"
 
 interface CarouselStore {
   project: CarouselProject | null
@@ -11,6 +11,7 @@ interface CarouselStore {
   duplicateSlide: (index: number) => void
   moveSlide: (from: number, to: number) => void
   setTheme: (themeId: ThemeId) => void
+  setLayout: (layoutId: LayoutId) => void
   setHighlightColor: (color: string | undefined) => void
   reset: () => void
 }
@@ -62,6 +63,12 @@ export const useCarouselStore = create<CarouselStore>((set) => ({
     set((state) => {
       if (!state.project) return state
       return { project: { ...state.project, theme: themeId } }
+    }),
+
+  setLayout: (layoutId) =>
+    set((state) => {
+      if (!state.project) return state
+      return { project: { ...state.project, layout: layoutId } }
     }),
 
   setHighlightColor: (color) =>

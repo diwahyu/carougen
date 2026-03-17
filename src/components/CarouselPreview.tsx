@@ -88,6 +88,7 @@ export function CarouselPreview() {
             topic={project.topic}
             scale={PREVIEW_SCALE}
             themeId={project.theme}
+            layoutId={project.layout}
             highlightColor={project.highlightColor}
           />
 

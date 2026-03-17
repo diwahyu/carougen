@@ -4,7 +4,7 @@ import { useCarouselStore } from "@/store/carousel-store"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { Slide, ThemeId } from "@/types/carousel"
+import { LayoutId, Slide, ThemeId } from "@/types/carousel"
 import { THEMES } from "@/lib/themes"
 import { CharCounter } from "./CharCounter"
 
@@ -16,6 +16,8 @@ const SOFT_LIMITS: Record<string, number> = {
 
 const HIGHLIGHT_PRESETS = [
   { label: "Default", value: undefined },
+  { label: "White", value: "#ffffff" },
+  { label: "Black", value: "#000000" },
   { label: "Red", value: "#ef4444" },
   { label: "Orange", value: "#f97316" },
   { label: "Amber", value: "#f59e0b" },
@@ -33,6 +35,7 @@ export function SlideEditorPanel() {
   const duplicateSlide = useCarouselStore((s) => s.duplicateSlide)
   const moveSlide = useCarouselStore((s) => s.moveSlide)
   const setTheme = useCarouselStore((s) => s.setTheme)
+  const setLayout = useCarouselStore((s) => s.setLayout)
   const setHighlightColor = useCarouselStore((s) => s.setHighlightColor)
 
   if (!project) {
@@ -82,6 +85,28 @@ export function SlideEditorPanel() {
                   style={{ backgroundColor: t.slideBg, boxShadow: `inset 0 -4px 0 ${t.blurOrbs[1]?.color || t.slideBg}` }}
                   title={t.name}
                 />
+              )
+            })}
+          </div>
+        </Field>
+
+        {/* Layout picker */}
+        <Field label="Layout">
+          <div className="flex gap-2">
+            {(["classic", "editorial"] as LayoutId[]).map((id) => {
+              const active = (project.layout || "classic") === id
+              return (
+                <button
+                  key={id}
+                  onClick={() => setLayout(id)}
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-all ${
+                    active
+                      ? "border-foreground bg-foreground text-background"
+                      : "border-muted hover:border-muted-foreground/50"
+                  }`}
+                >
+                  {id === "classic" ? "Classic" : "Editorial"}
+                </button>
               )
             })}
           </div>

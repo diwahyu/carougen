@@ -1,4 +1,4 @@
-import { ContentSlide, ThemeId } from "@/types/carousel"
+import { ContentSlide, LayoutId, ThemeId } from "@/types/carousel"
 import { SlideLayout } from "./SlideLayout"
 import { GradientText } from "./GradientText"
 import { getTheme } from "@/lib/themes"
@@ -9,6 +9,7 @@ export function ContentSlideCard({
   totalSlides,
   topic,
   themeId,
+  layoutId,
   highlightColor,
 }: {
   slide: ContentSlide
@@ -16,12 +17,13 @@ export function ContentSlideCard({
   totalSlides?: number
   topic?: string
   themeId?: ThemeId
+  layoutId?: LayoutId
   highlightColor?: string
 }) {
   const theme = getTheme(themeId)
 
   return (
-    <SlideLayout topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId}>
+    <SlideLayout topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId} layoutId={layoutId}>
       <div className="flex flex-col gap-8">
         {/* Slide number — large watermark */}
         <span

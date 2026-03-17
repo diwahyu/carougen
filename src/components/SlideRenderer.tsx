@@ -1,7 +1,7 @@
 "use client"
 
 import { forwardRef } from "react"
-import { Slide, ThemeId } from "@/types/carousel"
+import { LayoutId, Slide, ThemeId } from "@/types/carousel"
 import { HookSlideCard } from "./HookSlideCard"
 import { ContentSlideCard } from "./ContentSlideCard"
 import { CtaSlideCard } from "./CtaSlideCard"
@@ -13,11 +13,12 @@ interface SlideRendererProps {
   topic?: string
   scale?: number
   themeId?: ThemeId
+  layoutId?: LayoutId
   highlightColor?: string
 }
 
 export const SlideRenderer = forwardRef<HTMLDivElement, SlideRendererProps>(
-  function SlideRenderer({ slide, slideNumber, totalSlides, topic, scale = 1, themeId, highlightColor }, ref) {
+  function SlideRenderer({ slide, slideNumber, totalSlides, topic, scale = 1, themeId, layoutId, highlightColor }, ref) {
     return (
       <div
         style={{
@@ -33,11 +34,11 @@ export const SlideRenderer = forwardRef<HTMLDivElement, SlideRendererProps>(
             transformOrigin: "top left",
           }}
         >
-          {slide.type === "hook" && <HookSlideCard slide={slide} topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId} highlightColor={highlightColor} />}
+          {slide.type === "hook" && <HookSlideCard slide={slide} topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId} layoutId={layoutId} highlightColor={highlightColor} />}
           {slide.type === "content" && (
-            <ContentSlideCard slide={slide} slideNumber={slideNumber} totalSlides={totalSlides} topic={topic} themeId={themeId} highlightColor={highlightColor} />
+            <ContentSlideCard slide={slide} slideNumber={slideNumber} totalSlides={totalSlides} topic={topic} themeId={themeId} layoutId={layoutId} highlightColor={highlightColor} />
           )}
-          {slide.type === "cta" && <CtaSlideCard slide={slide} topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId} />}
+          {slide.type === "cta" && <CtaSlideCard slide={slide} topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId} layoutId={layoutId} />}
         </div>
       </div>
     )
