@@ -1,65 +1,83 @@
-import Image from "next/image";
+"use client"
+
+import { useRef, useCallback } from "react"
+import { CarouselInputPanel } from "@/components/CarouselInputPanel"
+import { CarouselPreview } from "@/components/CarouselPreview"
+import { SlideEditorPanel } from "@/components/SlideEditorPanel"
+import { ExportControls } from "@/components/ExportControls"
+import { SlideRenderer } from "@/components/SlideRenderer"
+import { SlideThumbnailList } from "@/components/SlideThumbnailList"
+import { useCarouselStore } from "@/store/carousel-store"
 
 export default function Home() {
+  const project = useCarouselStore((s) => s.project)
+  const slideRefs = useRef<Map<number, HTMLDivElement>>(new Map())
+
+  const setSlideRef = useCallback(
+    (index: number) => (el: HTMLDivElement | null) => {
+      if (el) slideRefs.current.set(index, el)
+      else slideRefs.current.delete(index)
+    },
+    []
+  )
+
+  const getSlideElements = useCallback(() => {
+    if (!project) return []
+    return project.slides.map((_, i) => slideRefs.current.get(i)!).filter(Boolean)
+  }, [project])
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="h-screen flex flex-col">
+      <header className="border-b px-6 py-3 flex items-center justify-between shrink-0">
+        <h1 className="font-bold text-lg">Carougen</h1>
+        <span className="text-xs text-muted-foreground">
+          Instagram Carousel Renderer
+        </span>
+      </header>
+
+      <div className="flex-1 flex min-h-0">
+        {/* Left: Input */}
+        <div className="w-[300px] border-r p-4 flex flex-col shrink-0">
+          <CarouselInputPanel />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+        {/* Center: Preview — IG simulator */}
+        <div className="flex-1 p-4 flex flex-col min-w-0 bg-neutral-50">
+          <CarouselPreview />
+        </div>
+
+        {/* Slide list */}
+        {project && (
+          <div className="w-[180px] border-l p-3 flex flex-col shrink-0 overflow-y-auto">
+            <SlideThumbnailList />
+          </div>
+        )}
+
+        {/* Right: Editor + Export */}
+        <div className="w-[300px] border-l p-4 flex flex-col shrink-0">
+          <SlideEditorPanel />
+          <ExportControls getSlideElements={getSlideElements} />
+        </div>
+      </div>
+
+      {/* Hidden full-size slides for export */}
+      {project && (
+        <div className="fixed left-[-9999px] top-0" aria-hidden="true">
+          {project.slides.map((slide, i) => (
+            <SlideRenderer
+              key={slide.id}
+              ref={setSlideRef(i)}
+              slide={slide}
+              slideNumber={i + 1}
+              totalSlides={project.slides.length}
+              topic={project.topic}
+              scale={1}
+              themeId={project.theme}
+              highlightColor={project.highlightColor}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          ))}
         </div>
-      </main>
+      )}
     </div>
-  );
+  )
 }
