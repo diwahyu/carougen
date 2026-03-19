@@ -1,5 +1,6 @@
 import { CtaSlide, LayoutId, ThemeId } from "@/types/carousel"
 import { SlideLayout } from "./SlideLayout"
+import { MarkdownRenderer } from "./MarkdownRenderer"
 import { getTheme } from "@/lib/themes"
 
 export function CtaSlideCard({
@@ -9,6 +10,7 @@ export function CtaSlideCard({
   totalSlides,
   themeId,
   layoutId,
+  highlightColor,
 }: {
   slide: CtaSlide
   topic?: string
@@ -16,6 +18,7 @@ export function CtaSlideCard({
   totalSlides?: number
   themeId?: ThemeId
   layoutId?: LayoutId
+  highlightColor?: string
 }) {
   const theme = getTheme(themeId)
   const socials = slide.socials ?? [
@@ -27,12 +30,12 @@ export function CtaSlideCard({
   return (
     <SlideLayout topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId} layoutId={layoutId}>
       <div className="flex flex-col items-center text-center gap-10">
-        <p
-          className="text-[54px] font-extrabold leading-[1.2] tracking-tight"
-          style={{ color: theme.textPrimary }}
-        >
-          {slide.text}
-        </p>
+        <MarkdownRenderer
+          markdown={slide.text}
+          themeConfig={theme}
+          highlightColor={highlightColor}
+          variant="cta"
+        />
 
         {/* Divider */}
         <div

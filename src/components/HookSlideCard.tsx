@@ -1,6 +1,6 @@
 import { HookSlide, LayoutId, ThemeId } from "@/types/carousel"
 import { SlideLayout } from "./SlideLayout"
-import { GradientText } from "./GradientText"
+import { MarkdownRenderer } from "./MarkdownRenderer"
 import { getTheme } from "@/lib/themes"
 
 export function HookSlideCard({
@@ -42,13 +42,12 @@ export function HookSlideCard({
             }}
           />
 
-          <GradientText
-            text={slide.text}
-            highlight={slide.highlight}
-            gradientText
-            className="text-[72px] font-black leading-[1.1] tracking-tight"
+          <MarkdownRenderer
+            markdown={slide.text}
             themeConfig={theme}
             highlightColor={highlightColor}
+            variant="hook"
+            gradientText
           />
         </div>
       </div>

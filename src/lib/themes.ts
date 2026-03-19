@@ -111,6 +111,28 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
     accentLine: { from: "#11c300", via: "#0ea600", to: "#0a8000" },
     swipeColor: "#11c300",
   },
+  lovaria: {
+    id: "lovaria",
+    name: "Lovaria",
+    slideBg: "#fff0f5",
+    textPrimary: "#4a0e2e",
+    textSecondary: "#d63384",
+    gradientFrom: "#4a0e2e",
+    gradientVia: "#d63384",
+    gradientTo: "#4a0e2e",
+    highlightFrom: "#e91e8c",
+    highlightVia: "#ff69b4",
+    highlightTo: "#e91e8c",
+    blurOrbs: [
+      { position: "top-[-10%] left-[-15%]", color: "#f9a8d4", size: "500px" },
+      { position: "bottom-[-20%] right-[-10%]", color: "#f472b6", size: "600px" },
+      { position: "top-[40%] right-[-20%]", color: "#fbb6ce", size: "400px" },
+    ],
+    badgeBg: "rgba(214,51,132,0.1)",
+    badgeText: "#d63384",
+    accentLine: { from: "#e91e8c", via: "#ff69b4", to: "#f9a8d4" },
+    swipeColor: "#d63384",
+  },
 }
 
 export function getTheme(id?: ThemeId): ThemeConfig {

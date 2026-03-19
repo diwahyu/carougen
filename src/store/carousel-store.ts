@@ -35,6 +35,8 @@ export const useCarouselStore = create<CarouselStore>((set) => ({
   deleteSlide: (index) =>
     set((state) => {
       if (!state.project || state.project.slides.length <= 2) return state
+      // Protect first (hook) and last (CTA) slides
+      if (index === 0 || index === state.project.slides.length - 1) return state
       const slides = state.project.slides.filter((_, i) => i !== index)
       const selectedSlideIndex = Math.min(state.selectedSlideIndex, slides.length - 1)
       return { project: { ...state.project, slides }, selectedSlideIndex }
@@ -44,15 +46,25 @@ export const useCarouselStore = create<CarouselStore>((set) => ({
     set((state) => {
       if (!state.project) return state
       const slide = state.project.slides[index]
-      const newSlide = { ...slide, id: Math.random().toString(36).substring(2, 9) }
+      // Always duplicate as content type, insert before CTA (last slide)
+      const newSlide = {
+        id: Math.random().toString(36).substring(2, 9),
+        type: "content" as const,
+        text: slide.text,
+      }
       const slides = [...state.project.slides]
-      slides.splice(index + 1, 0, newSlide)
-      return { project: { ...state.project, slides }, selectedSlideIndex: index + 1 }
+      // Insert before last slide (CTA)
+      const insertAt = slides.length - 1
+      slides.splice(insertAt, 0, newSlide)
+      return { project: { ...state.project, slides }, selectedSlideIndex: insertAt }
     }),
 
   moveSlide: (from, to) =>
     set((state) => {
       if (!state.project) return state
+      // Protect first (hook) and last (CTA) positions
+      if (from === 0 || from === state.project.slides.length - 1) return state
+      if (to <= 0 || to >= state.project.slides.length - 1) return state
       const slides = [...state.project.slides]
       const [moved] = slides.splice(from, 1)
       slides.splice(to, 0, moved)

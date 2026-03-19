@@ -48,6 +48,17 @@ export function SlideLayout({ children, topic, slideNumber, totalSlides, themeId
         >
           {children}
         </ClassicLayout>
+      ) : layout === "lovaria" ? (
+        <LovariaLayout
+          topic={topic}
+          slideNumber={slideNumber}
+          totalSlides={totalSlides}
+          isFirst={isFirst}
+          isLast={isLast}
+          theme={theme}
+        >
+          {children}
+        </LovariaLayout>
       ) : (
         <EditorialLayout
           topic={topic}
@@ -159,6 +170,88 @@ function ClassicLayout({
         )}
       </div>
     </>
+  )
+}
+
+function LovariaLayout({
+  children,
+  topic,
+  slideNumber,
+  totalSlides,
+  isFirst,
+  isLast,
+  theme,
+}: {
+  children: React.ReactNode
+  topic?: string
+  slideNumber?: number
+  totalSlides?: number
+  isFirst: boolean
+  isLast: boolean
+  theme: ReturnType<typeof getTheme>
+}) {
+  return (
+    <div style={{ fontFamily: "var(--font-playfair), 'Playfair Display', serif" }} className="flex flex-col h-full">
+      {/* Decorative top — double line with heart */}
+      <div className="relative z-10 flex items-center justify-center pt-10 pb-2 px-16">
+        <div className="flex-1 h-[1px]" style={{ backgroundColor: `${theme.textSecondary}40` }} />
+        <span className="px-6 text-[24px]">♡</span>
+        <div className="flex-1 h-[1px]" style={{ backgroundColor: `${theme.textSecondary}40` }} />
+      </div>
+
+      {/* Header — lovaria.match branding */}
+      <div className="relative z-10 flex flex-col items-center gap-2 px-16 pt-4 pb-6">
+        <span
+          className="text-[28px] font-semibold italic tracking-wide"
+          style={{ color: theme.textSecondary }}
+        >
+          lovaria.match
+        </span>
+        {topic && (
+          <span
+            className="text-[16px] font-normal tracking-[0.3em] uppercase"
+            style={{ color: theme.textSecondary, opacity: 0.6 }}
+          >
+            {topic}
+          </span>
+        )}
+      </div>
+
+      {/* Content area — centered with extra padding */}
+      <div className="relative z-10 flex-1 flex flex-col justify-center px-20">
+        {children}
+      </div>
+
+      {/* Footer — elegant minimal */}
+      <div className="relative z-10 flex flex-col items-center gap-4 px-16 pb-12 pt-4">
+        {!isLast && (
+          <div className="flex items-center gap-3" style={{ color: theme.swipeColor }}>
+            <div className="w-8 h-[1px]" style={{ backgroundColor: theme.swipeColor }} />
+            <span className="text-[16px] italic tracking-wide">swipe</span>
+            <div className="w-8 h-[1px]" style={{ backgroundColor: theme.swipeColor }} />
+          </div>
+        )}
+        <div className="flex items-center gap-6">
+          {slideNumber && totalSlides && (
+            <span
+              className="text-[16px] font-normal tabular-nums tracking-wider"
+              style={{ color: theme.textSecondary, opacity: 0.5 }}
+            >
+              {slideNumber} / {totalSlides}
+            </span>
+          )}
+        </div>
+        {/* Bottom decorative line */}
+        <div className="flex items-center justify-center w-full">
+          <div
+            className="w-24 h-[2px] rounded-full"
+            style={{
+              background: `linear-gradient(to right, transparent, ${theme.accentLine.via}, transparent)`,
+            }}
+          />
+        </div>
+      </div>
+    </div>
   )
 }
 

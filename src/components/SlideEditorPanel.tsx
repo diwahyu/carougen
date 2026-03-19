@@ -6,13 +6,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { LayoutId, Slide, ThemeId } from "@/types/carousel"
 import { THEMES } from "@/lib/themes"
-import { CharCounter } from "./CharCounter"
-
-const SOFT_LIMITS: Record<string, number> = {
-  hook: 60,
-  content: 120,
-  cta: 80,
-}
 
 const HIGHLIGHT_PRESETS = [
   { label: "Default", value: undefined },
@@ -49,13 +42,17 @@ export function SlideEditorPanel() {
   const slide = project.slides[selectedSlideIndex]
   if (!slide) return null
 
+  const isFirstSlide = selectedSlideIndex === 0
+  const isLastSlide = selectedSlideIndex === project.slides.length - 1
+
   function update(partial: Partial<Slide>) {
     updateSlide(selectedSlideIndex, { ...slide, ...partial } as Slide)
   }
 
-  const canMoveUp = selectedSlideIndex > 0
-  const canMoveDown = selectedSlideIndex < project.slides.length - 1
-  const canDelete = project.slides.length > 2
+  // Enforce structure: can't move hook (first) or CTA (last) out of position
+  const canMoveUp = selectedSlideIndex > 1 // Can't move into index 0 (hook)
+  const canMoveDown = selectedSlideIndex < project.slides.length - 2 // Can't move into last (CTA)
+  const canDelete = !isFirstSlide && !isLastSlide && project.slides.length > 2
 
   return (
     <div className="flex flex-col gap-4 h-full">
@@ -93,8 +90,9 @@ export function SlideEditorPanel() {
         {/* Layout picker */}
         <Field label="Layout">
           <div className="flex gap-2">
-            {(["classic", "editorial"] as LayoutId[]).map((id) => {
+            {(["classic", "editorial", "lovaria"] as LayoutId[]).map((id) => {
               const active = (project.layout || "classic") === id
+              const labels: Record<string, string> = { classic: "Classic", editorial: "Editorial", lovaria: "Lovaria" }
               return (
                 <button
                   key={id}
@@ -105,15 +103,15 @@ export function SlideEditorPanel() {
                       : "border-muted hover:border-muted-foreground/50"
                   }`}
                 >
-                  {id === "classic" ? "Classic" : "Editorial"}
+                  {labels[id]}
                 </button>
               )
             })}
           </div>
         </Field>
 
-        {/* Highlight color */}
-        <Field label="Highlight Color">
+        {/* Accent color (applies to **bold** in markdown) */}
+        <Field label="Accent Color">
           <div className="flex gap-1.5 flex-wrap">
             {HIGHLIGHT_PRESETS.map((preset) => {
               const active = project.highlightColor === preset.value
@@ -135,15 +133,18 @@ export function SlideEditorPanel() {
           </div>
         </Field>
 
-        {/* Common text field */}
-        <Field label="Text">
+        {/* Markdown text field */}
+        <Field label="Text (Markdown)">
           <Textarea
             value={slide.text}
             onChange={(e) => update({ text: e.target.value })}
-            rows={4}
-            placeholder="Main text for this slide"
+            rows={6}
+            placeholder={"# Title\n\nBody text with **bold** words.\n\n- List item 1\n- List item 2\n\n> Quote text"}
+            className="font-mono text-xs"
           />
-          <CharCounter value={slide.text} softLimit={SOFT_LIMITS[slide.type] || 100} />
+          <p className="text-[10px] text-muted-foreground">
+            Supports: # Title, ## Subtitle, **bold**, *italic*, - lists, &gt; quotes
+          </p>
         </Field>
 
         {/* Emoji for hook */}
@@ -153,17 +154,6 @@ export function SlideEditorPanel() {
               value={slide.emoji || ""}
               onChange={(e) => update({ emoji: e.target.value })}
               placeholder="e.g. 💡 🔥 🚀"
-            />
-          </Field>
-        )}
-
-        {/* Highlight for hook & content */}
-        {(slide.type === "hook" || slide.type === "content") && (
-          <Field label="Highlight text (optional)">
-            <Input
-              value={slide.highlight || ""}
-              onChange={(e) => update({ highlight: e.target.value })}
-              placeholder="Text to highlight with gradient"
             />
           </Field>
         )}
@@ -193,6 +183,7 @@ export function SlideEditorPanel() {
             </Field>
           </>
         )}
+
       </div>
 
       {/* Slide actions */}

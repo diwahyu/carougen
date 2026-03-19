@@ -1,6 +1,6 @@
 import { ContentSlide, LayoutId, ThemeId } from "@/types/carousel"
 import { SlideLayout } from "./SlideLayout"
-import { GradientText } from "./GradientText"
+import { MarkdownRenderer } from "./MarkdownRenderer"
 import { getTheme } from "@/lib/themes"
 
 export function ContentSlideCard({
@@ -38,13 +38,11 @@ export function ContentSlideCard({
           {String(slideNumber).padStart(2, "0")}
         </span>
 
-        <GradientText
-          text={slide.text}
-          highlight={slide.highlight}
-          className="text-[46px] font-bold leading-[1.4] tracking-tight"
-          style={{ color: theme.textPrimary }}
+        <MarkdownRenderer
+          markdown={slide.text}
           themeConfig={theme}
           highlightColor={highlightColor}
+          variant="content"
         />
       </div>
     </SlideLayout>

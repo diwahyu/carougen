@@ -3,14 +3,12 @@ import { z } from "zod"
 const hookSlideSchema = z.object({
   type: z.literal("hook"),
   text: z.string().min(1, "Hook text is required"),
-  highlight: z.string().optional(),
   emoji: z.string().optional(),
 })
 
 const contentSlideSchema = z.object({
   type: z.literal("content"),
   text: z.string().min(1, "Content text is required"),
-  highlight: z.string().optional(),
 })
 
 const ctaSlideSchema = z.object({
@@ -31,7 +29,8 @@ export const carouselInputSchema = z
     projectTitle: z.string().optional(),
     topic: z.string().optional(),
     prefix: z.string().min(1, "Prefix is required"),
-    theme: z.enum(["bw-gradient", "dark", "warm", "ai", "akademi-profit"]).optional(),
+    theme: z.enum(["bw-gradient", "dark", "warm", "ai", "akademi-profit", "lovaria"]).optional(),
+    layout: z.enum(["classic", "editorial", "lovaria"]).optional(),
     highlightColor: z.string().optional(),
     slides: z.array(slideSchema).min(2, "Minimum 2 slides required").max(15, "Maximum 15 slides"),
   })

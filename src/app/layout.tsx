@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Poppins, Geist_Mono } from "next/font/google";
+import { Inter, Poppins, Playfair_Display, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -12,6 +12,12 @@ const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 const geistMono = Geist_Mono({
@@ -32,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${poppins.variable} ${geistMono.variable} antialiased font-sans`}
+        className={`${inter.variable} ${poppins.variable} ${playfair.variable} ${geistMono.variable} antialiased font-sans`}
       >
         {children}
         <Toaster />

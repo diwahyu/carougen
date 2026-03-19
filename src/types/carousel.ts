@@ -2,7 +2,6 @@ export type HookSlide = {
   id: string
   type: "hook"
   text: string
-  highlight?: string
   emoji?: string
 }
 
@@ -10,7 +9,6 @@ export type ContentSlide = {
   id: string
   type: "content"
   text: string
-  highlight?: string
 }
 
 export type CtaSlide = {
@@ -23,9 +21,9 @@ export type CtaSlide = {
 
 export type Slide = HookSlide | ContentSlide | CtaSlide
 
-export type LayoutId = "classic" | "editorial"
+export type LayoutId = "classic" | "editorial" | "lovaria"
 
-export type ThemeId = "bw-gradient" | "dark" | "warm" | "ai" | "akademi-profit"
+export type ThemeId = "bw-gradient" | "dark" | "warm" | "ai" | "akademi-profit" | "lovaria"
 
 export type ThemeConfig = {
   id: ThemeId
