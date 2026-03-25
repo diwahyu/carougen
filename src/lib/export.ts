@@ -37,6 +37,44 @@ export async function exportAllSlidesToZip(
   saveAs(zipBlob, `${prefix}.zip`)
 }
 
+export function slugify(text: string): string {
+  // Remove markdown headers and emphasis
+  const clean = text
+    .replace(/^#+\s+/gm, "")
+    .replace(/\*\*(.+?)\*\*/g, "$1")
+    .replace(/\*(.+?)\*/g, "$1")
+    .split("\n")[0] // Only take the first line
+
+  return clean
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "") // Remove special characters
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/-+/g, "-") // Remove double hyphens
+    .trim()
+}
+
+export function generateSlidePrefix(
+  hookText?: string,
+  defaultPrefix?: string
+): string {
+  const now = new Date()
+  const date = now.toISOString().slice(0, 10).replace(/-/g, "")
+  const time = now.toTimeString().slice(0, 5).replace(/:/g, "")
+
+  if (hookText) {
+    const slug = slugify(hookText).slice(0, 40)
+    if (slug) {
+      return `${slug}-${date}`
+    }
+  }
+
+  if (defaultPrefix && defaultPrefix !== "carousel" && !defaultPrefix.startsWith("md-")) {
+    return defaultPrefix
+  }
+
+  return `carousel-${date}-${time}`
+}
+
 export function generateDefaultPrefix(): string {
   const now = new Date()
   const date = now.toISOString().slice(0, 10).replace(/-/g, "")

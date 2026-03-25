@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useCarouselStore } from "@/store/carousel-store"
-import { exportSlideToImage, downloadBlob, exportAllSlidesToZip } from "@/lib/export"
+import { exportSlideToImage, downloadBlob, exportAllSlidesToZip, generateSlidePrefix } from "@/lib/export"
 import { toast } from "sonner"
 
 interface ExportControlsProps {
@@ -17,7 +17,8 @@ export function ExportControls({ getSlideElements }: ExportControlsProps) {
 
   if (!project) return null
 
-  const prefix = project.prefix
+  const hookText = project.slides[0]?.text
+  const prefix = generateSlidePrefix(hookText, project.prefix)
 
   async function handleExportCurrent() {
     setExporting(true)
