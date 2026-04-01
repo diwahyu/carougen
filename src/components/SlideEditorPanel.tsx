@@ -90,9 +90,9 @@ export function SlideEditorPanel() {
         {/* Layout picker */}
         <Field label="Layout">
           <div className="flex gap-2">
-            {(["classic", "editorial", "lovaria"] as LayoutId[]).map((id) => {
+            {(["classic", "impact", "bold"] as LayoutId[]).map((id) => {
               const active = (project.layout || "classic") === id
-              const labels: Record<string, string> = { classic: "Classic", editorial: "Editorial", lovaria: "Lovaria" }
+              const labels: Record<string, string> = { classic: "Classic", impact: "Impact", bold: "Bold" }
               return (
                 <button
                   key={id}

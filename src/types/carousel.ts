@@ -21,7 +21,7 @@ export type CtaSlide = {
 
 export type Slide = HookSlide | ContentSlide | CtaSlide
 
-export type LayoutId = "classic" | "editorial" | "lovaria"
+export type LayoutId = "classic" | "impact" | "bold"
 
 export type ThemeId = "bw-gradient" | "dark" | "warm" | "ai" | "akademi-profit" | "lovaria"
 

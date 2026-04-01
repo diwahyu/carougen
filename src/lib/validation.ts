@@ -30,7 +30,7 @@ export const carouselInputSchema = z
     topic: z.string().optional(),
     prefix: z.string().min(1, "Prefix is required"),
     theme: z.enum(["bw-gradient", "dark", "warm", "ai", "akademi-profit", "lovaria"]).optional(),
-    layout: z.enum(["classic", "editorial", "lovaria"]).optional(),
+    layout: z.enum(["classic", "impact", "bold"]).optional(),
     highlightColor: z.string().optional(),
     slides: z.array(slideSchema).min(2, "Minimum 2 slides required").max(15, "Maximum 15 slides"),
   })

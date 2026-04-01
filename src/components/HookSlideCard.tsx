@@ -21,34 +21,84 @@ export function HookSlideCard({
   highlightColor?: string
 }) {
   const theme = getTheme(themeId)
+  const layout = layoutId || "classic"
 
+  // ── IMPACT: text left, emoji floats bottom-right (poster style)
+  if (layout === "impact") {
+    return (
+      <SlideLayout topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId} layoutId={layoutId}>
+        <div className="relative flex flex-col justify-start gap-8 min-h-0">
+          {/* Faint oversized emoji — bottom right, decorative */}
+          {slide.emoji && (
+            <span
+              className="absolute -bottom-100 -right-58 rotate-12 select-none pointer-events-none"
+              style={{ fontSize: "340px", lineHeight: 1, filter: "grayscale(20%)" }}
+            >
+              {slide.emoji}
+            </span>
+          )}
+
+          {/* Text — full width, no vertical bar */}
+          <div className="-mt-50">
+            <MarkdownRenderer
+              markdown={slide.text}
+              themeConfig={theme}
+              highlightColor={highlightColor}
+              variant="hook"
+              gradientText
+            />
+          </div>
+        </div>
+      </SlideLayout>
+    )
+  }
+
+  // ── BOLD: emoji centered large, full-width text below
+  if (layout === "bold") {
+    return (
+      <SlideLayout topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId} layoutId={layoutId}>
+        <div className="flex flex-col items-center gap-10">
+          {slide.emoji && (
+            <span className="text-[240px] leading-none select-none">{slide.emoji}</span>
+          )}
+
+          <div className="-mt-50">
+            <MarkdownRenderer
+              markdown={slide.text}
+              themeConfig={theme}
+              highlightColor={highlightColor}
+              variant="hook"
+              gradientText
+            />
+          </div>
+        </div>
+      </SlideLayout>
+    )
+  }
+
+  // ── CLASSIC: emoji above + left accent bar (default)
   return (
     <SlideLayout topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId} layoutId={layoutId}>
       <div className="flex flex-col gap-10">
-        {/* Emoji eye-catcher */}
         {slide.emoji && (
-          <span className="text-[120px] leading-none select-none">
-            {slide.emoji}
-          </span>
+          <span className="text-[120px] leading-none select-none">{slide.emoji}</span>
         )}
-
-        {/* Quote line + text */}
         <div className="flex gap-8">
-          {/* Vertical accent line */}
           <div
             className="w-[6px] shrink-0 rounded-full"
             style={{
               background: `linear-gradient(to bottom, ${theme.accentLine.from}, ${theme.accentLine.via}, ${theme.accentLine.to})`,
             }}
           />
-
-          <MarkdownRenderer
-            markdown={slide.text}
-            themeConfig={theme}
-            highlightColor={highlightColor}
-            variant="hook"
-            gradientText
-          />
+          <div className="-mt-50">
+            <MarkdownRenderer
+              markdown={slide.text}
+              themeConfig={theme}
+              highlightColor={highlightColor}
+              variant="hook"
+              gradientText
+            />
+          </div>
         </div>
       </div>
     </SlideLayout>
