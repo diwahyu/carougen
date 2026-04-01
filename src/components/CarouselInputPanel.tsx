@@ -6,10 +6,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { parseCarouselInput } from "@/lib/parser"
-import { parseMarkdownToProject } from "@/lib/markdown-parser"
 import { useCarouselStore } from "@/store/carousel-store"
-import { TemplatePicker } from "./TemplatePicker"
-import { SavedProjects } from "./SavedProjects"
 import { getPromptTemplate } from "@/lib/prompt-template"
 import { toast } from "sonner"
 
@@ -48,32 +45,8 @@ const SAMPLE_JSON = JSON.stringify(
   2
 )
 
-const SAMPLE_MD = `# 5 cara **meningkatkan engagement** di Instagram
----
-## Konsisten Posting
-
-Minimal 3x seminggu. Algoritma menyukai kreator yang **konsisten**.
-
-- Buat content calendar
-- Batch content di weekend
----
-## Hook yang Kuat
-
-Gunakan hook di **2 detik pertama**. Tanpa hook, orang akan *skip*.
-
-> Pertanyaan > Statement > Fakta mengejutkan
----
-## Balas Komentar
-
-Balas semua komentar dalam **1 jam pertama**. Ini boost engagement rate.
----
-## Simpan & Share!
-
-**Follow** untuk tips lainnya`
-
 export function CarouselInputPanel() {
   const [jsonInput, setJsonInput] = useState("")
-  const [mdInput, setMdInput] = useState("")
   const [promptContext, setPromptContext] = useState("")
   const [copied, setCopied] = useState(false)
   const setProject = useCarouselStore((s) => s.setProject)
@@ -83,16 +56,6 @@ export function CarouselInputPanel() {
     if (result.success) {
       setProject(result.project)
       toast.success("Carousel generated!")
-    } else {
-      result.errors.forEach((err) => toast.error(err))
-    }
-  }
-
-  function handleGenerateMd() {
-    const result = parseMarkdownToProject(mdInput)
-    if (result.success) {
-      setProject(result.project)
-      toast.success("Carousel generated from Markdown!")
     } else {
       result.errors.forEach((err) => toast.error(err))
     }
@@ -109,10 +72,7 @@ export function CarouselInputPanel() {
     <Tabs defaultValue="json" className="flex flex-col h-full">
       <TabsList className="shrink-0">
         <TabsTrigger value="json">JSON</TabsTrigger>
-        <TabsTrigger value="templates">Templates</TabsTrigger>
-        <TabsTrigger value="markdown">MD</TabsTrigger>
         <TabsTrigger value="prompt">Prompt</TabsTrigger>
-        <TabsTrigger value="saved">Saved</TabsTrigger>
       </TabsList>
 
       <TabsContent value="json" className="flex flex-col gap-3 flex-1 min-h-0 mt-3">
@@ -138,31 +98,6 @@ export function CarouselInputPanel() {
         </Button>
       </TabsContent>
 
-      <TabsContent value="templates" className="flex-1 min-h-0 mt-3 overflow-y-auto">
-        <TemplatePicker />
-      </TabsContent>
-
-      <TabsContent value="markdown" className="flex flex-col gap-3 flex-1 min-h-0 mt-3">
-        <div className="flex items-center justify-between">
-          <h2 className="font-semibold text-sm">Markdown Input</h2>
-          <Button variant="ghost" size="sm" onClick={() => { setMdInput(SAMPLE_MD); toast.info("Sample loaded") }}>
-            Sample
-          </Button>
-        </div>
-        <Textarea
-          value={mdInput}
-          onChange={(e) => setMdInput(e.target.value)}
-          placeholder={"# Hook Title\n---\n## Slide Title\n\nBody with **bold**\n\n- List item\n---\n## CTA\n\n**Follow!**"}
-          className="flex-1 font-mono text-xs min-h-0 resize-none"
-        />
-        <div className="text-[10px] text-muted-foreground">
-          Pisahkan slide dengan ---. Gunakan # title, **bold**, - list, &gt; quote. Slide pertama = hook, terakhir = CTA.
-        </div>
-        <Button onClick={handleGenerateMd} className="w-full">
-          Generate Carousel
-        </Button>
-      </TabsContent>
-
       <TabsContent value="prompt" className="flex flex-col gap-3 flex-1 min-h-0 mt-3">
         <h2 className="font-semibold text-sm">ChatGPT Prompt Generator</h2>
         <p className="text-[11px] text-muted-foreground">
@@ -181,10 +116,6 @@ export function CarouselInputPanel() {
             {getPromptTemplate(promptContext || undefined)}
           </pre>
         </div>
-      </TabsContent>
-
-      <TabsContent value="saved" className="flex-1 min-h-0 mt-3 overflow-y-auto">
-        <SavedProjects />
       </TabsContent>
     </Tabs>
   )

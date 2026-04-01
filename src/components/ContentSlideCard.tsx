@@ -56,22 +56,27 @@ export function ContentSlideCard({
     )
   }
 
-  // ── BOLD: number only (no step label), then text
+  // ── BOLD: "Step N" pill label above text
   if (layout === "bold") {
     return (
       <SlideLayout topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId} layoutId={layoutId}>
         <div className="flex flex-col gap-8">
-          <span
-            className="text-[120px] font-black leading-none select-none"
-            style={{
-              backgroundImage: `linear-gradient(to bottom, ${theme.accentLine.via}cc, ${theme.accentLine.via}20)`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            {String(slideNumber - 1).padStart(2, "0")}
-          </span>
+          <div className="flex items-center gap-4">
+            <div
+              className="rounded-full px-6 py-2 inline-flex items-center gap-2"
+              style={{
+                backgroundColor: `${theme.accentLine.via}20`,
+                border: `1.5px solid ${theme.accentLine.via}50`,
+              }}
+            >
+              <span
+                className="text-[22px] font-bold tracking-[0.15em] uppercase"
+                style={{ color: theme.accentLine.via }}
+              >
+                # {String(slideNumber - 1).padStart(2, "0")}
+              </span>
+            </div>
+          </div>
           <MarkdownRenderer
             markdown={slide.text}
             themeConfig={theme}

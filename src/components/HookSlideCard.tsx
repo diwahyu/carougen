@@ -53,24 +53,28 @@ export function HookSlideCard({
     )
   }
 
-  // ── BOLD: emoji centered large, full-width text below
+  // ── BOLD: emoji top-right badge + full-width text
   if (layout === "bold") {
     return (
       <SlideLayout topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId} layoutId={layoutId}>
-        <div className="flex flex-col items-center gap-10">
+        <div className="flex flex-col gap-10 -mt-20">
           {slide.emoji && (
-            <span className="text-[240px] leading-none select-none">{slide.emoji}</span>
+            <div className="flex justify-center">
+              <div
+                className="rounded-2xl px-6 py-4 inline-flex items-center justify-center"              
+              >
+                <span className="text-[250px] leading-none select-none">{slide.emoji}</span>
+              </div>
+            </div>
           )}
 
-          <div className="-mt-50">
-            <MarkdownRenderer
-              markdown={slide.text}
-              themeConfig={theme}
-              highlightColor={highlightColor}
-              variant="hook"
-              gradientText
-            />
-          </div>
+          <MarkdownRenderer
+            markdown={slide.text}
+            themeConfig={theme}
+            highlightColor={highlightColor}
+            variant="hook"
+            gradientText
+          />
         </div>
       </SlideLayout>
     )
@@ -90,15 +94,13 @@ export function HookSlideCard({
               background: `linear-gradient(to bottom, ${theme.accentLine.from}, ${theme.accentLine.via}, ${theme.accentLine.to})`,
             }}
           />
-          <div className="-mt-50">
-            <MarkdownRenderer
-              markdown={slide.text}
-              themeConfig={theme}
-              highlightColor={highlightColor}
-              variant="hook"
-              gradientText
-            />
-          </div>
+          <MarkdownRenderer
+            markdown={slide.text}
+            themeConfig={theme}
+            highlightColor={highlightColor}
+            variant="hook"
+            gradientText
+          />
         </div>
       </div>
     </SlideLayout>
