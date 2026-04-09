@@ -8,9 +8,10 @@ import { toast } from "sonner"
 
 interface ExportControlsProps {
   getSlideElements: () => HTMLElement[]
+  compact?: boolean
 }
 
-export function ExportControls({ getSlideElements }: ExportControlsProps) {
+export function ExportControls({ getSlideElements, compact }: ExportControlsProps) {
   const project = useCarouselStore((s) => s.project)
   const selectedSlideIndex = useCarouselStore((s) => s.selectedSlideIndex)
   const [exporting, setExporting] = useState(false)
@@ -52,15 +53,36 @@ export function ExportControls({ getSlideElements }: ExportControlsProps) {
     }
   }
 
+  // Compact mode — used in the header bar (icon buttons)
+  if (compact) {
+    return (
+      <div className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleExportCurrent}
+          disabled={exporting}
+          className="text-xs"
+        >
+          Export Slide
+        </Button>
+        <Button
+          size="sm"
+          onClick={handleExportZip}
+          disabled={exporting}
+          className="text-xs"
+        >
+          {exporting ? "..." : "ZIP All"}
+        </Button>
+      </div>
+    )
+  }
+
+  // Full mode — used in the editor panel
   return (
     <div className="flex flex-col gap-2 pt-3 border-t">
       <h3 className="text-xs font-medium text-muted-foreground">Export</h3>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={handleExportCurrent}
-        disabled={exporting}
-      >
+      <Button variant="outline" size="sm" onClick={handleExportCurrent} disabled={exporting}>
         {exporting ? "Exporting..." : `Export Slide ${selectedSlideIndex + 1}`}
       </Button>
       <Button size="sm" onClick={handleExportZip} disabled={exporting}>

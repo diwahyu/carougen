@@ -13,7 +13,7 @@ interface MarkdownRendererProps {
 }
 
 const FONT_SIZES = {
-  hook: { h1: "72px", h2: "60px", p: "54px", li: "48px", quote: "48px" },
+  hook: { h1: "110px", h2: "70px", p: "60px", li: "80px", quote: "80px" },
   content: { h1: "54px", h2: "46px", p: "40px", li: "36px", quote: "36px" },
   cta: { h1: "54px", h2: "46px", p: "40px", li: "36px", quote: "36px" },
 }

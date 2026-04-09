@@ -31,7 +31,7 @@ export function HookSlideCard({
           {/* Faint oversized emoji — bottom right, decorative */}
           {slide.emoji && (
             <span
-              className="absolute -bottom-100 -right-58 rotate-12 select-none pointer-events-none"
+              className="absolute -bottom-80 -right-58 rotate-12 select-none pointer-events-none"
               style={{ fontSize: "340px", lineHeight: 1, filter: "grayscale(20%)" }}
             >
               {slide.emoji}
@@ -80,14 +80,22 @@ export function HookSlideCard({
     )
   }
 
-  // ── CLASSIC: emoji above + left accent bar (default)
+  // ── CLASSIC: emoji as giant transparent background, left accent bar + text overlaid
   return (
     <SlideLayout topic={topic} slideNumber={slideNumber} totalSlides={totalSlides} themeId={themeId} layoutId={layoutId}>
-      <div className="flex flex-col gap-10">
+      <div className="relative flex flex-col gap-10">
+        {/* Emoji — giant background watermark, ~50% of slide width (540px) */}
         {slide.emoji && (
-          <span className="text-[120px] leading-none select-none">{slide.emoji}</span>
+          <span
+            className="absolute -top-120 -right-62 select-none pointer-events-none"
+            style={{ fontSize: "640px", lineHeight: 1, opacity: 0.15, transform: "rotate(15deg)" }}
+          >
+            {slide.emoji}
+          </span>
         )}
-        <div className="flex gap-8">
+
+        {/* Text with left accent bar */}
+        <div className="relative flex gap-8">
           <div
             className="w-[6px] shrink-0 rounded-full"
             style={{
